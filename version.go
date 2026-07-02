@@ -47,27 +47,53 @@ func (cmd *versionCmd) Run(app *kong.Kong) error {
 
 var _debugReadBuildInfo = debug.ReadBuildInfo
 
-var _generateBuildReport = func() string {
+// _buildRevision returns the VCS revision embedded at build time
+// by the Go toolchain, and whether the working tree was dirty.
+// It returns an empty revision if build info is unavailable.
+func _buildRevision() (revision string, dirty bool) {
 	info, ok := _debugReadBuildInfo()
 	if !ok {
-		return ""
+		return "", false
 	}
 
-	var (
-		revision string
-		dirty    bool
-		time     string
-	)
 	for _, setting := range info.Settings {
 		switch setting.Key {
 		case "vcs.revision":
 			revision = setting.Value
 		case "vcs.modified":
 			dirty = setting.Value == "true"
-		case "vcs.time":
-			time = setting.Value
 		}
 	}
+	return revision, dirty
+}
+
+// currentCommit returns the git commit the running binary was built from.
+//
+// It prefers the value stamped via ldflags (main._commit, set by install.sh),
+// and falls back to the VCS revision embedded by the Go toolchain.
+// It returns an empty string when neither is available,
+// e.g. for release builds made with -trimpath.
+func currentCommit() string {
+	if _commit != "" {
+		return _commit
+	}
+	revision, _ := _buildRevision()
+	return revision
+}
+
+var _generateBuildReport = func() string {
+	info, ok := _debugReadBuildInfo()
+	if !ok {
+		return ""
+	}
+
+	var buildTime string
+	for _, setting := range info.Settings {
+		if setting.Key == "vcs.time" {
+			buildTime = setting.Value
+		}
+	}
+	revision, dirty := _buildRevision()
 
 	var out strings.Builder
 	if revision != "" {
@@ -76,11 +102,11 @@ var _generateBuildReport = func() string {
 			out.WriteString("-dirty")
 		}
 	}
-	if time != "" {
+	if buildTime != "" {
 		if out.Len() > 0 {
 			fmt.Fprint(&out, " ")
 		}
-		out.WriteString(time)
+		out.WriteString(buildTime)
 	}
 
 	return out.String()

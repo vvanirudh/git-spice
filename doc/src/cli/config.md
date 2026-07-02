@@ -349,6 +349,33 @@ resolve them the same way as with rebase-based restacking:
 3. Run $$gs continue$$ to continue the restack operation
 4. Alternatively, run $$gs abort$$ to abort the operation
 
+### spice.update.check
+
+<!-- gs:version unreleased -->
+
+Whether gritt-spice should check for updates
+and notify you when a newer version is available.
+
+When enabled, gritt-spice compares the commit it was built from
+against the latest commit on `main`,
+and prints a notice with a summary of the new commits
+the next time you run a command.
+The check runs at most once a day
+and only in an interactive terminal.
+Run $$gs update$$ to upgrade.
+
+**Accepted values:**
+
+- `true` (default): check for updates
+- `false`: don't check for updates
+
+**Example:**
+
+```bash
+# Disable update checks.
+git config spice.update.check false
+```
+
 ### spice.rebaseContinue.edit
 
 <!-- gs:version v0.10.0 -->

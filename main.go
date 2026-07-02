@@ -43,6 +43,16 @@ import (
 // Set by goreleaser at build time.
 var _version = "dev"
 
+// _commit is the git commit the binary was built from.
+// It is stamped by install.sh (and gs update) via
+// -ldflags "-X main._commit=...", and is empty otherwise.
+var _commit = ""
+
+// _configDir is the gritt-spice configuration directory,
+// e.g. ~/.config/git-spice. It is set in main() before command dispatch
+// and used to persist cross-repository state such as the update-check cache.
+var _configDir string
+
 var (
 	// _secretStash is the secret stash used by the application.
 	//
@@ -97,6 +107,7 @@ func main() {
 			logger.Fatalf("Error getting user config directory: %v", err)
 		}
 	}
+	_configDir = filepath.Join(userConfigDir, "git-spice")
 
 	spiceConfig, err := spice.LoadConfig(
 		ctx,
@@ -128,7 +139,8 @@ func main() {
 	}
 
 	cmdName := filepath.Base(os.Args[0])
-	parser, err := kong.New(&cmd,
+	parser, err := kong.New(
+		&cmd,
 		kong.Name(cmdName),
 		kong.Description("gs (gritt-spice) is a command line tool for stacking Git branches."),
 		kong.Resolvers(spiceConfig),
@@ -155,7 +167,8 @@ func main() {
 	// user-configured shorthands take precedence over builtins.
 	shorthands := shorthand.Sources{spiceConfig, builtinShorthands}
 
-	komplete.Run(parser,
+	komplete.Run(
+		parser,
 		komplete.WithTransformCompleted(func(args []string) []string {
 			return shorthand.Expand(shorthands, args)
 		}),
@@ -250,6 +263,7 @@ type mainCmd struct {
 		Dir           kong.ChangeDirFlag `short:"C" placeholder:"DIR" help:"Change to DIR before doing anything" predictor:"dirs"`
 		Prompt        bool               `name:"prompt" negatable:"" default:"${defaultPrompt}" help:"Whether to prompt for missing information"`
 		RestackMethod string             `config:"restack.method" default:"merge" enum:"rebase,merge" help:"Method to use for restacking (rebase or merge)"`
+		UpdateCheck   bool               `name:"update-check" config:"update.check" negatable:"" default:"true" help:"Check for gritt-spice updates and notify when a newer version is available"`
 	} `embed:"" group:"globals"`
 
 	Shell shellCmd `cmd:"" group:"Shell"`
@@ -280,6 +294,7 @@ type mainCmd struct {
 	Trunk  trunkCmd  `cmd:"" group:"Navigation" help:"Move to the trunk branch"`
 
 	Version versionCmd `cmd:"" help:"Print version information and quit"`
+	Update  updateCmd  `cmd:"" help:"Update gritt-spice to the latest version"`
 
 	Internal internalCmd `cmd:"" hidden:"" help:"For internal use only."`
 
@@ -297,6 +312,10 @@ func (cmd *mainCmd) AfterApply(ctx context.Context, kctx *kong.Context, logger *
 		return fmt.Errorf("build view: %w", err)
 	}
 	kctx.BindTo(view, (*ui.View)(nil))
+
+	// Notify the user if a newer gritt-spice is available.
+	// This is best-effort and must never block the requested command.
+	cmd.notifyUpdateAvailable(ctx, kctx, logger, view)
 
 	// TODO: bind interfaces, not values
 	// TODO:

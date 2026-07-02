@@ -66,6 +66,9 @@ Global Flags:
       --[no-]prompt               Whether to prompt for missing information
       --restack-method="merge"    Method to use for restacking (rebase or merge)
                                   (🔧 spice.restack.method)
+      --[no-]update-check         Check for gritt-spice updates and notify
+                                  when a newer version is available (🔧
+                                  spice.update.check)
 
 Configuration (🔧):
   spice.submit.assignees     Default assignees to add to change requests.

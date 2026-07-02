@@ -169,7 +169,15 @@ get_gobin() {
 # Install gs using go install.
 install_gs() {
     info "Installing git-spice..."
-    go install -v -tags="" go.abhg.dev/gs
+
+    # Stamp the installed commit into the binary so that gs can detect
+    # when a newer version is available on main and offer to self-update.
+    local ldflags=""
+    if command -v git &> /dev/null && git rev-parse --git-dir &> /dev/null; then
+        ldflags="-X main._commit=$(git rev-parse HEAD)"
+    fi
+
+    go install -v -tags="" -ldflags="$ldflags" go.abhg.dev/gs
     info "git-spice installed successfully."
 }
 

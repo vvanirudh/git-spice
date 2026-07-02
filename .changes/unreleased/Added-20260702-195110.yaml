@@ -1,0 +1,6 @@
+kind: Added
+body: Add `gs update` to upgrade a source-installed gritt-spice, and show a notice
+  (with a summary of new commits) when the installed version is behind the latest
+  commit on main. The check runs at most once a day and can be disabled with
+  `git config spice.update.check false`.
+time: 2026-07-02T19:51:10+00:00

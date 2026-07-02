@@ -1,10 +1,9 @@
-Usage: gs run precommit-checks [flags]
+Usage: gs update [flags]
 
-Run configured local checks before push
+Update gritt-spice to the latest version
 
 Flags:
-  --only=STRING    Comma-separated list of check names to run (default: all)
-  --fix            On failure, hand captured output to Claude for diagnosis
+  --force    Update even if already up to date.
 
 Global Flags:
   -h, --help                      Show help for the command

@@ -10,11 +10,15 @@ Global Flags:
       --[no-]prompt               Whether to prompt for missing information
       --restack-method="merge"    Method to use for restacking (rebase or merge)
                                   (🔧 spice.restack.method)
+      --[no-]update-check         Check for gritt-spice updates and notify
+                                  when a newer version is available (🔧
+                                  spice.update.check)
 
 Commands:
   continue    Continue an interrupted operation
   abort       Abort an interrupted operation
   version     Print version information and quit
+  update      Update gritt-spice to the latest version
 
 Shell
   shell completion    Generate shell completion script
