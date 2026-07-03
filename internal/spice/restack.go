@@ -110,7 +110,7 @@ func (s *Service) Restack(ctx context.Context, name string) (*RestackResponse, e
 		}
 
 	case RestackMethodMerge:
-		if err := s.restackWithMerge(ctx, name, b.Base, baseHash, upstream); err != nil {
+		if err := s.restackWithMerge(ctx, name, b.Base, baseHash, b.Head); err != nil {
 			return nil, fmt.Errorf("merge: %w", err)
 		}
 
@@ -216,7 +216,9 @@ func (s *Service) CheckRestacked(ctx context.Context, name string) (baseHash git
 
 // restackWithMerge restacks a branch using the merge method.
 // It merges the new base into the branch, creating a merge commit.
-func (s *Service) restackWithMerge(ctx context.Context, name string, baseName string, baseHash git.Hash, upstream git.Hash) error {
+//
+// head is the current head of the branch being restacked.
+func (s *Service) restackWithMerge(ctx context.Context, name string, baseName string, baseHash git.Hash, head git.Hash) error {
 	// Ensure we're on the branch to restack
 	currentBranch, err := s.wt.CurrentBranch(ctx)
 	if err != nil {
@@ -228,8 +230,15 @@ func (s *Service) restackWithMerge(ctx context.Context, name string, baseName st
 		}
 	}
 
-	// If the base is already an ancestor of HEAD, we're done (fast-forward case)
-	if s.repo.IsAncestor(ctx, baseHash, upstream) {
+	// If the base is already an ancestor of the branch head,
+	// we're done (fast-forward case).
+	//
+	// Note that this must be checked against the branch head,
+	// not the upstream (recorded base hash):
+	// the recorded base hash may already match the new base
+	// even when the branch head does not yet contain it,
+	// in which case a merge is still required.
+	if s.repo.IsAncestor(ctx, baseHash, head) {
 		s.log.Debug("Base is already ancestor, no merge needed", "branch", name)
 		return nil
 	}

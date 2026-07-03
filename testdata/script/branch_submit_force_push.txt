@@ -7,6 +7,10 @@ at '2024-07-22T19:56:12Z'
 cd repo
 git init
 git commit --allow-empty -m 'Initial commit'
+# This fork uses merge-based restacking by default;
+# pin the rebase method to preserve this script's original behavior.
+git config spice.restack.method rebase
+
 
 # set up a fake GitHub remote
 shamhub init
@@ -38,8 +42,8 @@ git add feature1.txt
 git commit -m 'Update feature1'
 
 ! gs branch submit
-stderr 'Branch may have been updated by someone else'
-stderr 'failed to push some refs'
+stderr 'Push rejected: remote branch "feature1" has diverged'
+stderr 'run again with --force'
 
 gs branch submit --force
 

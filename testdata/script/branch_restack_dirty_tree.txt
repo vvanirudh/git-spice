@@ -10,6 +10,10 @@ git init
 git add init.txt
 git commit -m 'Initial commit'
 gs repo init
+# This fork uses merge-based restacking by default;
+# pin the rebase method to preserve this script's original behavior.
+git config spice.restack.method rebase
+
 
 # create a feature branch with the same files
 mv $WORK/extra/init.2.txt init.txt

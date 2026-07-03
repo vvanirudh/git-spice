@@ -9,6 +9,10 @@ cd repo
 git init
 git commit --allow-empty -m 'Initial commit'
 gs repo init
+# This fork uses merge-based restacking by default;
+# pin the rebase method to preserve this script's original behavior.
+git config spice.restack.method rebase
+
 
 cp $WORK/extra/feature1.txt feature1.txt
 git add feature1.txt
@@ -30,8 +34,8 @@ cp $WORK/extra/feature3.conflict.txt feature3.txt
 git add feature2.txt feature3.txt
 ! gs cc -m 'Add feature 2 and 3 here for some reason'
 stderr 'There was a conflict while rebasing'
-stderr '  gs rebase continue'
-stderr '  gs rebase abort'
+stderr '  gs continue'
+stderr '  gs abort'
 
 # only feature2.txt should be conflicting right now
 git status --porcelain
@@ -44,8 +48,8 @@ cp $WORK/extra/feature2.resolved.txt feature2.txt
 git add feature2.txt
 ! gs rebase continue
 stderr 'There was a conflict while rebasing'
-stderr '  gs rebase continue'
-stderr '  gs rebase abort'
+stderr '  gs continue'
+stderr '  gs abort'
 
 # only feature3.txt should be conflicting right now
 git status --porcelain

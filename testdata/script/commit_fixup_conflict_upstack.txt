@@ -9,6 +9,10 @@ cd repo
 git init
 git commit --allow-empty -m 'Initial commit'
 gs repo init
+# This fork uses merge-based restacking by default;
+# pin the rebase method to preserve this script's original behavior.
+git config spice.restack.method rebase
+
 git config spice.experiment.commitFixup true
 
 # o (main)
@@ -34,8 +38,8 @@ git add base_file.txt
 # Attempt fixup of feature1 - should succeed but fail during upstack restack
 ! gs commit fixup HEAD~1
 stderr 'There was a conflict while rebasing'
-stderr 'gs rebase continue'
-stderr 'gs rebase abort'
+stderr 'gs continue'
+stderr 'gs abort'
 stderr 'Modify base file'
 
 # Check conflict status

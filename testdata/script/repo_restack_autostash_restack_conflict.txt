@@ -10,6 +10,10 @@ git commit -m 'Initial commit' --allow-empty
 git add file.txt other.txt
 git commit -m 'Add file.txt'
 gs repo init
+# This fork uses merge-based restacking by default;
+# pin the rebase method to preserve this script's original behavior.
+git config spice.restack.method rebase
+
 
 # Modify file.txt on feat1
 cp $WORK/other/feat1-file.txt file.txt

@@ -8,6 +8,10 @@ at '2024-06-13T21:22:32Z'
 cd repo
 git init
 git commit --allow-empty -m 'Initial commit'
+# This fork uses merge-based restacking by default;
+# pin the rebase method to preserve this script's original behavior.
+git config spice.restack.method rebase
+
 
 # set up a fake GitHub remote
 shamhub init

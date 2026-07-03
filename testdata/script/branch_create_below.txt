@@ -7,6 +7,10 @@ cd repo
 git init
 git commit --allow-empty -m 'Initial commit'
 gs repo init
+# This fork uses merge-based restacking by default;
+# pin the rebase method to preserve this script's original behavior.
+git config spice.restack.method rebase
+
 
 # Cannot insert below trunk.
 ! gs branch create --below foo -m 'this will not work'

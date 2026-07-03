@@ -1,0 +1,3 @@
+kind: Fixed
+body: 'restack: With ''spice.restack.method'' set to ''merge'', branches are now correctly merged with their base when the recorded base hash is up to date but the branch head does not yet contain it. Previously, the restack was incorrectly skipped and reported as successful.'
+time: 2026-07-02T20:57:04.962867-04:00

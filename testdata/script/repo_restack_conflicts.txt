@@ -10,6 +10,10 @@ git add file.txt
 git commit -m 'Add file.txt'
 
 gs repo init
+# This fork uses merge-based restacking by default;
+# pin the rebase method to preserve this script's original behavior.
+git config spice.restack.method rebase
+
 
 # Create a branch that will conflict
 cp $WORK/other/feat1.txt file.txt
