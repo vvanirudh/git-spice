@@ -30,8 +30,8 @@ gs bc C -m 'Make a dependent change'
 # But that'll conflict and we'll have to resolve it.
 ! gs upstack onto A
 stderr 'There was a conflict while rebasing'
-stderr '  gs rebase continue'
-stderr '  gs rebase abort'
+stderr '  gs continue'
+stderr '  gs abort'
 
 # Resolve the conflict
 cp $WORK/extra/feature.3-resolved.txt feature.txt

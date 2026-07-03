@@ -10,7 +10,11 @@ git add init.txt
 git commit -m 'Initial commit'
 gs repo init
 
-# Test 1: gs continue works with rebase (default method)
+# This fork uses merge-based restacking by default;
+# pin rebase for tests 1 and 2. Test 3 switches to merge.
+git config spice.restack.method rebase
+
+# Test 1: gs continue works with rebase
 cp $WORK/extra/init.feat1.txt init.txt
 git add init.txt
 gs bc feat1 -m feat1

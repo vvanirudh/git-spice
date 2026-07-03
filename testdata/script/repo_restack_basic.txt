@@ -8,6 +8,10 @@ git init
 git commit -m 'Initial commit' --allow-empty
 
 gs repo init
+# This fork uses merge-based restacking by default;
+# pin the rebase method to preserve this script's original behavior.
+git config spice.restack.method rebase
+
 git add feat1.txt
 gs branch create feat1 -m 'feat1 commit'
 git add feat2.txt

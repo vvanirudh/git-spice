@@ -8,6 +8,10 @@ cd repo
 git init
 git commit --allow-empty -m 'Initial commit'
 gs repo init
+# This fork uses merge-based restacking by default;
+# pin the rebase method to preserve this script's original behavior.
+git config spice.restack.method rebase
+
 
 git add feature1.txt
 gs bc -m 'Add feature 1' feature1
@@ -25,8 +29,8 @@ gs bottom
 env EDITOR=mockedit MOCKEDIT_GIVE=$WORK/input/rebase-todo.txt
 ! gs branch edit
 stderr 'The rebase operation was interrupted'
-stderr '  gs rebase continue'
-stderr '  gs rebase abort'
+stderr '  gs continue'
+stderr '  gs abort'
 
 # Add a new commit.
 git add feature1-part2.txt

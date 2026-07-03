@@ -1,4 +1,6 @@
-# Default configuration still uses rebase (backward compatibility)
+# Merge is the default restacking method in this fork.
+# Without any configuration, restacking creates a merge commit
+# instead of rebasing.
 
 as 'Test User <test@example.com>'
 at 2025-06-20T21:28:29Z
@@ -15,17 +17,16 @@ gs branch create feat1 -m 'feat1 commit'
 gs branch checkout main
 git commit --allow-empty -m 'New trunk commit'
 
-# Restack without configuring merge method (should use rebase)
+# Restack without configuring a method (should use merge)
 gs branch checkout feat1
 gs branch restack
 stderr 'feat1: restacked on main'
 
-# Verify NO merge commit was created (rebase was used)
+# Verify a merge commit was created (merge was used)
 git log --oneline --graph feat1
-! stdout 'Merge'
-! stdout 'Restack: merge'
+stdout 'Restack: merge main into feat1'
 
-# Verify the commit was rebased (same commit message, different hash)
+# Verify the original commit is preserved (not rewritten)
 git log --oneline feat1
 stdout 'feat1 commit'
 

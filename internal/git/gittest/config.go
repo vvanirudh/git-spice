@@ -1,7 +1,6 @@
 package gittest
 
 import (
-	"runtime"
 	"strconv"
 )
 
@@ -16,10 +15,13 @@ func DefaultConfig() Config {
 		"core.autocrlf":         "false",
 	}
 
-	// On Windows, increase the timeout for template lookups.
-	if runtime.GOOS == "windows" {
-		cfg["spice.submit.listTemplatesTimeout"] = "10s"
-	}
+	// Increase the timeout for template lookups.
+	// The default (1s) is too aggressive for tests:
+	// when many test scripts run in parallel,
+	// a single ShamHub template request spawns
+	// a dozen git subprocesses and can easily exceed it,
+	// causing submissions to flakily omit change templates.
+	cfg["spice.submit.listTemplatesTimeout"] = "10s"
 
 	return cfg
 }
