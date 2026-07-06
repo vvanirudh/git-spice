@@ -271,6 +271,7 @@ type mainCmd struct {
 
 	Repo repoCmd `cmd:"" aliases:"r" group:"Repository"`
 	Log  logCmd  `cmd:"" aliases:"l" group:"Log"`
+	Show showCmd `cmd:"" group:"Log" help:"List all tracked branches with change request status"`
 
 	Stack     stackCmd     `cmd:"" aliases:"s" group:"Stack"`
 	Upstack   upstackCmd   `cmd:"" aliases:"us" group:"Stack"`

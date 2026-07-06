@@ -34,6 +34,12 @@ type logCmd struct {
 }
 
 func (*logCmd) AfterApply(kctx *kong.Context) error {
+	return bindListHandler(kctx)
+}
+
+// bindListHandler binds a ListHandler provider into the Kong context.
+// It is shared by commands that list branches ('gs log' and 'gs show').
+func bindListHandler(kctx *kong.Context) error {
 	return kctx.BindToProvider(func(
 		log *silog.Logger,
 		repo *git.Repository,

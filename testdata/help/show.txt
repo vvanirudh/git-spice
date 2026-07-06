@@ -1,0 +1,44 @@
+Usage: gs show [flags]
+
+List all tracked branches with change request status
+
+Lists all tracked branches, not just the current stack, and includes change
+request status information for each branch.
+
+This is equivalent to 'gs ls -aS'.
+
+With --json, prints output to stdout as a stream of JSON objects. See
+https://abhinav.github.io/git-spice/cli/json/ for details.
+
+Flags:
+  -a, --all               Show all tracked branches, not just the current stack.
+                          (🔧 spice.log.all)
+  -S, --[no-]cr-status    Request and include information about the Change
+                          Request (🔧 spice.log.crStatus)
+      --json              Write to stdout as a stream of JSON objects in an
+                          unspecified order
+
+Global Flags:
+  -h, --help                      Show help for the command
+      --version                   Print version information and quit
+  -v, --verbose                   Enable verbose output ($GIT_SPICE_VERBOSE)
+  -C, --dir=DIR                   Change to DIR before doing anything
+      --[no-]prompt               Whether to prompt for missing information
+      --restack-method="merge"    Method to use for restacking (rebase or merge)
+                                  (🔧 spice.restack.method)
+      --[no-]update-check         Check for gritt-spice updates and notify
+                                  when a newer version is available (🔧
+                                  spice.update.check)
+
+Configuration (🔧):
+  spice.log.crFormat            Format for displaying change request
+                                information. One of 'id' or 'url'.
+  spice.log.pushStatusFormat    Show indicator for branches that are out of sync
+                                with their remotes. One of 'true', 'false' and
+                                'aheadbehind'.
+  spice.logLong.crFormat        Format for displaying change request information
+                                in long log. One of 'id' or 'url', defaults to
+                                crFormat.
+  spice.logShort.crFormat       Format for displaying change request information
+                                in short log. One of 'id' or 'url', defaults to
+                                crFormat.

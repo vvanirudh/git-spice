@@ -1,0 +1,3 @@
+kind: Added
+body: 'show: Add ''gs show'' command, an alias for ''gs ls -aS'' that lists all tracked branches with change request status.'
+time: 2026-07-06T09:23:11.342859278-07:00

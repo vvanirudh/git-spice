@@ -36,6 +36,7 @@ Repository
 Log
   log (l) short (s)    List branches
   log (l) long (l)     List branches and commits
+  show                 List all tracked branches with change request status
 
 Stack
   stack (s) submit (s)         Submit a stack
