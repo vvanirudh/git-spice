@@ -121,6 +121,7 @@ main
 [
   {
     "number": 1,
+    "draft": true,
     "html_url": "$SHAMHUB_URL/alice/example/change/1",
     "state": "open",
     "title": "feat1",
@@ -144,6 +145,7 @@ main
   },
   {
     "number": 2,
+    "draft": true,
     "html_url": "$SHAMHUB_URL/alice/example/change/2",
     "state": "open",
     "title": "feat2",
@@ -167,6 +169,7 @@ main
   },
   {
     "number": 3,
+    "draft": true,
     "html_url": "$SHAMHUB_URL/alice/example/change/3",
     "state": "open",
     "title": "feat3",

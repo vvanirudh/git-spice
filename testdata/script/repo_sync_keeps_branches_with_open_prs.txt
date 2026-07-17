@@ -94,6 +94,7 @@ New contents of feature2
     "html_url": "$SHAMHUB_URL/alice/example/change/1",
     "merged": true,
     "number": 1,
+    "draft": true,
     "state": "closed",
     "title": "Add feature1 v1"
   },
@@ -117,6 +118,7 @@ New contents of feature2
     },
     "html_url": "$SHAMHUB_URL/alice/example/change/2",
     "number": 2,
+    "draft": true,
     "state": "open",
     "title": "Add feature1 v2"
   }

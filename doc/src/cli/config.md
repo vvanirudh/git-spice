@@ -420,8 +420,8 @@ This option affects both interactive and non-interactive modes:
 
 **Accepted values:**
 
-- `true`: create CRs as drafts by default
-- `false` (default): create CRs as ready for review by default
+- `true` (default): create CRs as drafts by default
+- `false`: create CRs as ready for review by default
 
 ### spice.submit.assignees
 

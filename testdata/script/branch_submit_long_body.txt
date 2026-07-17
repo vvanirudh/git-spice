@@ -67,6 +67,6 @@ End of message.
 > Open your editor to write a detailed description of the change
 {}
 ===
-> Draft: [y/N]
+> Draft: [Y/n]
 > Mark the change as a draft?
 false

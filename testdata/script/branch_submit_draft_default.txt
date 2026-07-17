@@ -1,0 +1,95 @@
+# New change requests are created as drafts by default,
+# without any spice.submit.draft configuration.
+
+as 'Test <test@example.com>'
+at '2025-07-05T21:28:29Z'
+
+# setup
+cd repo
+git init
+git commit --allow-empty -m 'Initial commit'
+
+# set up a fake GitHub remote
+shamhub init
+shamhub new origin alice/example.git
+shamhub register alice
+git push origin main
+
+env SHAMHUB_USERNAME=alice
+gs auth login
+
+# Test case 1: non-interactive submit without any flags or config
+# should create a draft CR by default.
+git add feature1.txt
+gs bc -m 'Add feature1' feature1
+gs branch submit --fill
+stderr 'Created #'
+
+shamhub dump change 1
+cmpenvJSON stdout $WORK/golden/draft-default.json
+
+# Test case 2: --no-draft overrides the default and creates a non-draft CR.
+git add feature2.txt
+gs bc -m 'Add feature2' feature2
+gs branch submit --fill --no-draft
+stderr 'Created #'
+
+shamhub dump change 2
+cmpenvJSON stdout $WORK/golden/draft-override.json
+
+-- repo/feature1.txt --
+Contents of feature1
+
+-- repo/feature2.txt --
+Contents of feature2
+
+-- golden/draft-default.json --
+{
+  "number": 1,
+  "state": "open",
+  "title": "Add feature1",
+  "draft": true,
+  "body": "",
+  "html_url": "$SHAMHUB_URL/alice/example/change/1",
+  "head": {
+    "repository": {
+      "owner": "alice",
+      "name": "example"
+    },
+    "ref": "feature1",
+    "sha": "dbcf2133e568c7abf343166d32aefb2ecd3ec8be"
+  },
+  "base": {
+    "repository": {
+      "owner": "alice",
+      "name": "example"
+    },
+    "ref": "main",
+    "sha": "3bcbc80b165d8b4bb7fe792b7ca9effc713b32a5"
+  }
+}
+
+-- golden/draft-override.json --
+{
+  "number": 2,
+  "state": "open",
+  "title": "Add feature2",
+  "body": "",
+  "html_url": "$SHAMHUB_URL/alice/example/change/2",
+  "head": {
+    "repository": {
+      "owner": "alice",
+      "name": "example"
+    },
+    "ref": "feature2",
+    "sha": "ca0588e9603d29d74b9c81b8536be941e9a868f4"
+  },
+  "base": {
+    "repository": {
+      "owner": "alice",
+      "name": "example"
+    },
+    "ref": "feature1",
+    "sha": "dbcf2133e568c7abf343166d32aefb2ecd3ec8be"
+  }
+}

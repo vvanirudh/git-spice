@@ -85,6 +85,7 @@ INF Pushed feature1
   {
     "number": 1,
     "html_url": "$SHAMHUB_URL/alice/example/change/1",
+    "draft": true,
     "state": "open",
     "title": "feature1",
     "body": "",

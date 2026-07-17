@@ -56,6 +56,7 @@ This is the starting commit message.
 [
   {
     "number": 1,
+    "draft": true,
     "state": "open",
     "title": "Add feature",
     "body": "This adds a feature.\nThe feature does things.\nThis is the starting commit message.\n\n## Summary\n\nExplain the changes you made.\n\n## Testing\n\nExplain how these changes were tested.\n\n## Rollback Plan\n\nExplain how to revert these changes.\n",

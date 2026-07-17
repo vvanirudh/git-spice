@@ -73,6 +73,7 @@ INF Created #3: $SHAMHUB_URL/alice/example/change/3
 [
   {
     "number": 1,
+    "draft": true,
     "state": "open",
     "title": "Add feature 1",
     "body": "",
@@ -97,6 +98,7 @@ INF Created #3: $SHAMHUB_URL/alice/example/change/3
   },
   {
     "number": 2,
+    "draft": true,
     "state": "open",
     "title": "Add feature 2",
     "body": "",
@@ -121,6 +123,7 @@ INF Created #3: $SHAMHUB_URL/alice/example/change/3
   },
   {
     "number": 3,
+    "draft": true,
     "state": "open",
     "title": "Add feature 3",
     "body": "",
@@ -149,6 +152,7 @@ INF Created #3: $SHAMHUB_URL/alice/example/change/3
 [
   {
     "number": 1,
+    "draft": true,
     "state": "closed",
     "merged": true,
     "title": "Add feature 1",
@@ -174,6 +178,7 @@ INF Created #3: $SHAMHUB_URL/alice/example/change/3
   },
   {
     "number": 2,
+    "draft": true,
     "state": "open",
     "title": "Add feature 2",
     "body": "",
@@ -198,6 +203,7 @@ INF Created #3: $SHAMHUB_URL/alice/example/change/3
   },
   {
     "number": 3,
+    "draft": true,
     "state": "open",
     "title": "Add feature 3",
     "body": "",

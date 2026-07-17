@@ -56,6 +56,7 @@ New contents of feature1
 [
   {
     "number": 1,
+    "draft": true,
     "state": "open",
     "title": "Add feature1",
     "body": "",
@@ -92,6 +93,7 @@ New contents of feature1
 [
   {
     "number": 1,
+    "draft": true,
     "state": "open",
     "title": "Add feature1",
     "body": "",

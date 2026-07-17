@@ -56,7 +56,7 @@ feature
   "want": "## Summary\n\nDetails\n\n## Test plan\n\nExplain\n\nIssue:\n"
 }
 ===
-> Draft: [y/N]
+> Draft: [Y/n]
 > Mark the change as a draft?
 false
 

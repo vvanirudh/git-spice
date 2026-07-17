@@ -1,0 +1,5 @@
+kind: Changed
+body: >-
+  submit: New change requests are now created as drafts by default.
+  Use --no-draft or set spice.submit.draft to false to opt out.
+time: 2026-07-17T12:00:00.000000-08:00

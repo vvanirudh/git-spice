@@ -62,7 +62,7 @@ exit 1
 > Open your editor to write a detailed description of the change
 "This adds feature1.\nFeature1 does a thing.\nIt is very well tested.\n"
 ===
-> Draft: [y/N]
+> Draft: [Y/n]
 > Mark the change as a draft?
 false
 ===
@@ -81,6 +81,6 @@ true
   "want": "This adds feature1.\nFeature1 does a thing.\nIt is very well tested.\n"
 }
 ===
-> Draft: [y/N]
+> Draft: [Y/n]
 > Mark the change as a draft?
 false

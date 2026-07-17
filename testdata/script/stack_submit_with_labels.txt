@@ -66,6 +66,7 @@ This is feature 3
 [
   {
     "number": 1,
+    "draft": true,
     "state": "open",
     "title": "Add feature 1",
     "body": "",
@@ -90,6 +91,7 @@ This is feature 3
   },
   {
     "number": 2,
+    "draft": true,
     "state": "open",
     "title": "Add feature 2",
     "body": "",
@@ -114,6 +116,7 @@ This is feature 3
   },
   {
     "number": 3,
+    "draft": true,
     "state": "open",
     "title": "Add feature 3",
     "body": "",
@@ -142,6 +145,7 @@ This is feature 3
 [
   {
     "number": 1,
+    "draft": true,
     "state": "closed",
     "merged": true,
     "title": "Add feature 1",
@@ -167,6 +171,7 @@ This is feature 3
   },
   {
     "number": 2,
+    "draft": true,
     "state": "open",
     "title": "Add feature 2",
     "body": "",
@@ -191,6 +196,7 @@ This is feature 3
   },
   {
     "number": 3,
+    "draft": true,
     "state": "open",
     "title": "Add feature 3",
     "body": "",

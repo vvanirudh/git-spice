@@ -84,6 +84,7 @@ main
 [
   {
     "number": 1,
+    "draft": true,
     "html_url": "$SHAMHUB_URL/alice/example/change/1",
     "state": "open",
     "title": "Add theta feature",
@@ -107,6 +108,7 @@ main
   },
   {
     "number": 2,
+    "draft": true,
     "html_url": "$SHAMHUB_URL/alice/example/change/2",
     "state": "open",
     "title": "Add checkmark feature",
@@ -130,6 +132,7 @@ main
   },
   {
     "number": 3,
+    "draft": true,
     "html_url": "$SHAMHUB_URL/alice/example/change/3",
     "state": "open",
     "title": "Add developer feature",
@@ -153,6 +156,7 @@ main
   },
   {
     "number": 4,
+    "draft": true,
     "html_url": "$SHAMHUB_URL/alice/example/change/4",
     "state": "open",
     "title": "Add café feature",
@@ -176,6 +180,7 @@ main
   },
   {
     "number": 5,
+    "draft": true,
     "html_url": "$SHAMHUB_URL/alice/example/change/5",
     "state": "open",
     "title": "Add Japanese feature",

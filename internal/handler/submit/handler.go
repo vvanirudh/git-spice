@@ -155,7 +155,7 @@ type Options struct {
 	// when creating new Change Requests.
 	//
 	// --draft/--no-draft will override this value.
-	DraftDefault bool `config:"submit.draft" help:"Default value for --draft when creating change requests." hidden:"" default:"false"`
+	DraftDefault bool `config:"submit.draft" help:"Default value for --draft when creating change requests." hidden:"" default:"true"`
 
 	// TODO: Other creation options e.g.:
 	// - milestone

@@ -88,6 +88,7 @@ feature 2
 [
   {
     "number": 1,
+    "draft": true,
     "state": "open",
     "title": "Add feature1",
     "body": "",
@@ -124,6 +125,7 @@ feature 2
 [
   {
     "number": 1,
+    "draft": true,
     "state": "open",
     "title": "Add feature1",
     "body": "",
@@ -165,6 +167,7 @@ feature 2
     },
     "html_url": "$SHAMHUB_URL/alice/example/change/2",
     "number": 2,
+    "draft": true,
     "state": "open",
     "title": "Add feature2"
   }
