@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"os"
 	"strings"
@@ -104,7 +105,7 @@ type updateCmd struct {
 
 func (cmd *updateCmd) Run(ctx context.Context, log *silog.Logger) error {
 	if currentCommit() == "" {
-		return fmt.Errorf("cannot determine the installed version; " +
+		return errors.New("cannot determine the installed version; " +
 			"reinstall using install.sh to enable updates")
 	}
 

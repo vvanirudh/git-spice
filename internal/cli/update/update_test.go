@@ -24,10 +24,13 @@ func TestChecker_Check(t *testing.T) {
 		wantCommits  []CommitSummary
 	}{
 		{
-			name: "Behind",
+			// The common stale case: the installed commit (base)
+			// is an ancestor of main (head), so GitHub reports
+			// main as "ahead" and populates ahead_by, not behind_by.
+			name: "MainAhead",
 			response: compareResponse{
-				Status:   "behind",
-				BehindBy: 2,
+				Status:  "ahead",
+				AheadBy: 2,
 				Commits: []struct {
 					SHA    string `json:"sha"`
 					Commit struct {
@@ -47,15 +50,17 @@ func TestChecker_Check(t *testing.T) {
 		},
 		{
 			name:         "Identical",
-			response:     compareResponse{Status: "identical", BehindBy: 0},
+			response:     compareResponse{Status: "identical"},
 			wantBehind:   false,
 			wantBehindBy: 0,
 		},
 		{
+			// main has commits the installed binary lacks
+			// while the binary also has commits not on main.
 			name: "Diverged",
 			response: compareResponse{
-				Status:   "diverged",
-				BehindBy: 1,
+				Status:  "diverged",
+				AheadBy: 1,
 				Commits: []struct {
 					SHA    string `json:"sha"`
 					Commit struct {
@@ -72,8 +77,10 @@ func TestChecker_Check(t *testing.T) {
 			},
 		},
 		{
-			name:         "Ahead",
-			response:     compareResponse{Status: "ahead", BehindBy: 0},
+			// A local build ahead of main (e.g. unmerged work):
+			// main is "behind" the installed commit, so we are up to date.
+			name:         "MainBehind",
+			response:     compareResponse{Status: "behind", BehindBy: 1},
 			wantBehind:   false,
 			wantBehindBy: 0,
 		},
@@ -109,8 +116,8 @@ func TestChecker_Check_cacheHonored(t *testing.T) {
 		func(w http.ResponseWriter, _ *http.Request) {
 			hits.Add(1)
 			require.NoError(t, json.NewEncoder(w).Encode(compareResponse{
-				Status:   "behind",
-				BehindBy: 1,
+				Status:  "ahead",
+				AheadBy: 1,
 				Commits: []struct {
 					SHA    string `json:"sha"`
 					Commit struct {
@@ -202,7 +209,7 @@ func TestChecker_Check_writesCache(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(
 		func(w http.ResponseWriter, _ *http.Request) {
 			require.NoError(t, json.NewEncoder(w).Encode(
-				compareResponse{Status: "behind", BehindBy: 3},
+				compareResponse{Status: "ahead", AheadBy: 3},
 			))
 		},
 	))
