@@ -1,0 +1,5 @@
+kind: Fixed
+body: 'update: Show the stale-version notice when the installed binary is behind
+  the latest commit on main. Previously the check misread the GitHub compare
+  response and never reported an available update.'
+time: 2026-07-18T01:26:51+00:00

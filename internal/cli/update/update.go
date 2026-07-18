@@ -218,6 +218,7 @@ func (c *Checker) Check(ctx context.Context) (*Status, error) {
 // See https://docs.github.com/en/rest/commits/commits#compare-two-commits.
 type compareResponse struct {
 	Status   string `json:"status"`
+	AheadBy  int    `json:"ahead_by"`
 	BehindBy int    `json:"behind_by"`
 	Commits  []struct {
 		SHA    string `json:"sha"`
@@ -262,9 +263,13 @@ func (c *Checker) fetch(ctx context.Context) (*Status, error) {
 		return nil, fmt.Errorf("decode response: %w", err)
 	}
 
+	// The compare range is base...head = installed commit...branch tip,
+	// so GitHub reports how far the branch is *ahead* of the installed
+	// commit in ahead_by. That count is exactly how many commits behind
+	// the installed binary is.
 	status := &Status{
-		Behind:       cmp.BehindBy > 0,
-		BehindBy:     cmp.BehindBy,
+		Behind:       cmp.AheadBy > 0,
+		BehindBy:     cmp.AheadBy,
 		LatestCommit: c.CurrentCommit,
 	}
 	for _, commit := range cmp.Commits {
