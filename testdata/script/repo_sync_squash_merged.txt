@@ -64,7 +64,7 @@ feature 3
 > Open your editor to write a detailed description of the change
 {"give": "Adds features 1, 2, and 3 in one PR."}
 ===
-> Draft: [y/N]
+> Draft: [Y/n]
 > Mark the change as a draft?
 false
 -- golden/pull.txt --

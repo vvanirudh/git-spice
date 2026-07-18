@@ -81,6 +81,7 @@ true
 [
   {
     "number": 1,
+    "draft": true,
     "html_url": "$SHAMHUB_URL/alice/example/change/1",
     "state": "open",
     "title": "feature1",
@@ -107,6 +108,7 @@ true
 [
   {
     "number": 1,
+    "draft": true,
     "html_url": "$SHAMHUB_URL/alice/example/change/1",
     "state": "open",
     "title": "feature1",
@@ -130,6 +132,7 @@ true
   },
   {
     "number": 2,
+    "draft": true,
     "html_url": "$SHAMHUB_URL/alice/example/change/2",
     "state": "open",
     "title": "feature2",

@@ -79,6 +79,7 @@ New contents of feature2
 [
   {
     "number": 1,
+    "draft": true,
     "state": "closed",
     "title": "Add feature1",
     "body": "",
@@ -122,6 +123,7 @@ New contents of feature2
     "html_url": "$SHAMHUB_URL/alice/example/change/2",
     "merged": true,
     "number": 2,
+    "draft": true,
     "state": "closed",
     "title": "Add feature2"
   }

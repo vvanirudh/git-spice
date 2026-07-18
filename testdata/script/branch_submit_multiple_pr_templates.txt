@@ -64,6 +64,6 @@ true
   "want": "This adds a feature with a long original commit message.\n\nHIDDEN TEMPLATE\n"
 }
 ===
-> Draft: [y/N]
+> Draft: [Y/n]
 > Mark the change as a draft?
 false

@@ -54,6 +54,7 @@ MOCKEDIT_GIVE=$WORK/input/pr-body.txt mockedit
 [
   {
     "number": 1,
+    "draft": true,
     "html_url": "$SHAMHUB_URL/alice/example/change/1",
     "state": "open",
     "title": "Add feature",

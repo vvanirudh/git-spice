@@ -30,7 +30,7 @@ gs bc feat4 -m 'feat4'
 
 # submit all four
 gs bco feat4
-gs dss --fill
+gs dss --fill --no-draft
 
 # server-side: mark feat1 as draft,
 # request review on feat2,

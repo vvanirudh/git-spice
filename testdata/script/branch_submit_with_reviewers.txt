@@ -69,6 +69,7 @@ Update to feature 1
 -- golden/cr1.json --
 {
   "number": 1,
+  "draft": true,
   "state": "open",
   "title": "Add feature 1",
   "body": "",
@@ -96,6 +97,7 @@ Update to feature 1
 {
   "html_url": "$SHAMHUB_URL/alice/example/change/2",
   "number": 2,
+  "draft": true,
   "requested_reviewers": ["bob"],
   "state": "open",
   "title": "Add feature 2",
@@ -121,6 +123,7 @@ Update to feature 1
 -- golden/cr3.json --
 {
   "number": 3,
+  "draft": true,
   "state": "open",
   "title": "Add feature 3",
   "body": "",
@@ -147,6 +150,7 @@ Update to feature 1
 -- golden/cr1-final.json --
 {
   "number": 1,
+  "draft": true,
   "state": "open",
   "title": "Add feature 1",
   "body": "",

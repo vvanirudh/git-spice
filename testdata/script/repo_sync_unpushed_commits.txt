@@ -51,6 +51,7 @@ Contents of feature2
 -- golden/pull.json --
 {
   "number": 1,
+  "draft": true,
   "state": "closed",
   "title": "Add feature1",
   "body": "",

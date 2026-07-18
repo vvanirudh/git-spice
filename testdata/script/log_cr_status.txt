@@ -27,7 +27,7 @@ gs bc feat3 -m 'feat3'
 
 # submit feat1-3, leave feat4 unsubmitted
 gs bco feat3
-gs dss --fill
+gs dss --fill --no-draft
 
 # server-side, merge feat1, close feat3.
 shamhub merge alice/example 1

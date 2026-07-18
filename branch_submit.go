@@ -34,10 +34,10 @@ Use --dry-run to print what would be submitted without submitting it.
 
 For new Change Requests, a prompt will allow filling metadata.
 Use --fill to populate title and body from the commit messages.
-The --[no-]draft flag marks the CR as draft or not.
-Use the 'spice.submit.draft' configuration option
-to mark new CRs as drafts (or not) by default,
-skipping the prompt.
+New CRs are created as drafts by default.
+Use --no-draft to create them as ready for review,
+or set the 'spice.submit.draft' configuration option to false
+to change the default.
 
 For updating Change Requests,
 use --[no-]draft to change its draft status.
@@ -75,10 +75,10 @@ func (*branchSubmitCmd) Help() string {
 		For new Change Requests, a prompt will allow filling metadata.
 		Use the --title and --body flags to skip the prompt,
 		or the --fill flag to use the commit message to fill them in.
-		The --[no-]draft flag marks the CR as draft or not.
-		Use the 'spice.submit.draft' configuration option
-		to mark new CRs as drafts (or not) by default,
-		skipping the prompt.
+		New CRs are created as drafts by default.
+		Use --no-draft to create them as ready for review,
+		or set the 'spice.submit.draft' configuration option to false
+		to change the default.
 
 		For updating Change Requests,
 		use --[no-]draft to change its draft status.

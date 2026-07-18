@@ -42,6 +42,7 @@ Part 2 of the feature
 [
   {
     "number": 1,
+    "draft": true,
     "state": "open",
     "title": "Add feature",
     "body": "Add feature\n\nAdd feature part 2",

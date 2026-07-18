@@ -54,6 +54,7 @@ feature 2
 [
   {
     "number": 1,
+    "draft": true,
     "state": "open",
     "title": "feature1",
     "body": "\n\nThis is the first template.\n",
@@ -77,6 +78,7 @@ feature 2
   },
   {
     "number": 2,
+    "draft": true,
     "state": "open",
     "title": "feature2",
     "body": "\n\nThis is the second template.\n",
