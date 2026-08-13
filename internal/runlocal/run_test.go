@@ -71,8 +71,12 @@ func TestDefaultRunner_timeout(t *testing.T) {
 	require.Len(t, results, 1)
 
 	assert.NotEqual(t, 0, results[0].ExitCode)
-	assert.True(t, results[0].Duration < 1*time.Second,
-		"expected duration < 1s, got %v", results[0].Duration)
+	// The check sleeps 5s with a 100ms timeout, so it must be killed
+	// well before completing. Allow generous slack for process-kill
+	// latency on loaded CI runners while still proving the timeout fired.
+	assert.Less(t, results[0].Duration, 4*time.Second,
+		"expected the check to be killed before its 5s sleep completed, got %v",
+		results[0].Duration)
 	assert.True(
 		t,
 		strings.Contains(out.String(), "▶ slow: sleep 5"),

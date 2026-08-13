@@ -143,8 +143,9 @@ func (cmd *branchSubmitCmd) Run(
 				}
 				return fmt.Errorf("generate PR summary: %w", err)
 			}
-			// Empty title with no error means no diff available;
-			// continue with submit (will prompt for metadata).
+			// Empty title with no error means either no diff was
+			// available or the base was stale; continue with submit
+			// (will prompt for metadata).
 		}
 	}
 
@@ -155,6 +156,47 @@ func (cmd *branchSubmitCmd) Run(
 		Base:    cmd.Base,
 		Options: &cmd.Options,
 	})
+}
+
+// gitBaseStaleChecker is the subset of [*git.Repository] needed to
+// detect whether a base branch lags its upstream.
+type gitBaseStaleChecker interface {
+	BranchUpstream(ctx context.Context, branch string) (string, error)
+	CommitAheadBehind(ctx context.Context, upstream, head string) (ahead, behind int, err error)
+}
+
+// warnIfBaseStale reports whether the local base branch is behind its
+// configured upstream, logging an actionable warning when it is.
+//
+// A stale base (commonly a lagging local trunk) would widen the
+// base...branch range used to fill a PR summary, sweeping in commits
+// already merged upstream. Callers should skip auto-fill when this
+// returns true.
+func warnIfBaseStale(
+	ctx context.Context,
+	log *silog.Logger,
+	repo gitBaseStaleChecker,
+	base string,
+) (stale bool) {
+	upstream, err := repo.BranchUpstream(ctx, base)
+	if err != nil {
+		// No upstream configured (e.g., a stacked feature branch);
+		// there is nothing to compare against.
+		return false
+	}
+
+	_, behind, err := repo.CommitAheadBehind(ctx, upstream, base)
+	if err != nil || behind == 0 {
+		return false
+	}
+
+	log.Warnf(
+		"Base branch %q is %d commit(s) behind %q; "+
+			"run 'gs repo sync' before using --claude-summary "+
+			"to avoid including already-merged commits",
+		base, behind, upstream,
+	)
+	return true
 }
 
 // generatePRSummary generates a PR title and body using Claude.
@@ -189,6 +231,14 @@ func generatePRSummary(
 		} else if branchInfo.Base != "" {
 			base = branchInfo.Base
 		}
+	}
+
+	// Guard against a stale local base branch: if it lags its upstream,
+	// the base...branch range would include commits already merged
+	// upstream, polluting the generated title and body. Skip auto-fill
+	// until the user syncs.
+	if warnIfBaseStale(ctx, log, repo, base) {
+		return "", "", nil
 	}
 
 	// Get diff between base and branch.

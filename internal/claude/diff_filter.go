@@ -181,6 +181,11 @@ func matchesAnyPattern(path string, patterns []string) bool {
 		return true
 	}
 
+	// Diff paths always use forward slashes, but filepath.Clean uses
+	// backslashes on Windows. Normalize back so directory patterns like
+	// "vendor/*" match on every platform.
+	path = filepath.ToSlash(path)
+
 	for _, pattern := range patterns {
 		// Try matching the full path.
 		matched, err := filepath.Match(pattern, path)

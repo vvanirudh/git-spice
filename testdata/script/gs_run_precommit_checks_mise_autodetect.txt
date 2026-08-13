@@ -3,6 +3,10 @@
 # A fake 'mise' binary echoes its arguments so the test can verify
 # which tasks were invoked.
 
+# The fake 'mise' is a shell script, which cannot be chmod'd and
+# executed as a binary on Windows.
+[!unix] skip
+
 as 'Test <test@example.com>'
 at '2026-05-04T12:01:00Z'
 

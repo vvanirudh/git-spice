@@ -43,7 +43,10 @@ jobs:
   test:
     needs: [test-matrix]
     strategy:
-      fail-fast: true
+      # Don't cancel the whole matrix when one job fails: a single
+      # flaky job (network-dependent tool installs, timing-sensitive
+      # tests) shouldn't hide the status of every other platform.
+      fail-fast: false
       matrix: ${{ fromJson(needs.test-matrix.outputs.matrix) }}
     # Schema of matrix:
     #   name: string

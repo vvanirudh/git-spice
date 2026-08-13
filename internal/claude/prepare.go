@@ -40,6 +40,12 @@ func PrepareDiff(diffText string, opts *PrepareDiffOptions) (*PreparedDiff, erro
 		log = silog.Nop()
 	}
 
+	// An empty diff needs no tooling; fail fast regardless of whether
+	// the Claude CLI is installed.
+	if diffText == "" {
+		return nil, errors.New("no changes to process")
+	}
+
 	// Check Claude availability.
 	client := NewClient(nil)
 	if !client.IsAvailable() {
@@ -51,10 +57,6 @@ func PrepareDiff(diffText string, opts *PrepareDiffOptions) (*PreparedDiff, erro
 	if err != nil {
 		log.Warn("Could not load claude config, using defaults", "error", err)
 		cfg = DefaultConfig()
-	}
-
-	if diffText == "" {
-		return nil, errors.New("no changes to process")
 	}
 
 	// Early size check to prevent OOM on huge diffs.
