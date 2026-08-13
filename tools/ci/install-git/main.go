@@ -90,7 +90,15 @@ func run(log *silog.Logger, req installRequest) error {
 		// If we're on a Debian-based system, we need to install
 		// build dependencies with apt-get.
 		if req.Debian {
-			installArgs := append([]string{"apt-get", "install"}, _gitBuildDependencies...)
+			// Refresh the package index first. Runner images can ship a
+			// stale index that still pins build-dependency versions no
+			// longer on the mirror, making apt-get install 404 on the
+			// exact .deb (e.g. libcurl4-gnutls-dev).
+			if err := xec.Command(ctx, log, "sudo", "apt-get", "update").Run(); err != nil {
+				return fmt.Errorf("apt-get update: %w", wrapExecError(err))
+			}
+
+			installArgs := append([]string{"apt-get", "install", "-y"}, _gitBuildDependencies...)
 			if err := xec.Command(ctx, log, "sudo", installArgs...).Run(); err != nil {
 				return fmt.Errorf("apt-get: %w", wrapExecError(err))
 			}

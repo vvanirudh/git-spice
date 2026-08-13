@@ -2,6 +2,10 @@
 # for diagnosis when the check fails.
 # The command still exits non-zero even when --fix is used.
 
+# The fake check binary is a shell script, which cannot be chmod'd and
+# executed as a binary on Windows.
+[!unix] skip
+
 as 'Test <test@example.com>'
 at '2026-05-04T12:02:00Z'
 
