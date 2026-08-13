@@ -1,0 +1,7 @@
+kind: Added
+body: >-
+  claude review: Reviews can now be enriched with call-graph impact
+  analysis from the optional `code-review-graph` tool, surfacing
+  changed-function risk and untested code. Enable it by setting
+  `graph.enabled` in `claude.yaml`.
+time: 2026-07-10T16:52:03.000000-08:00

@@ -45,10 +45,15 @@ func BuildPrompt(template string, vars map[string]string) string {
 }
 
 // BuildReviewPrompt builds a code review prompt.
-func BuildReviewPrompt(cfg *Config, title, diff string) string {
+//
+// context is optional call-graph impact analysis to inject; pass an
+// empty string when unavailable. Templates without a {context}
+// placeholder simply ignore it.
+func BuildReviewPrompt(cfg *Config, title, diff, context string) string {
 	return BuildPrompt(cfg.Prompts.Review, map[string]string{
-		"title": title,
-		"diff":  diff,
+		"title":   title,
+		"diff":    diff,
+		"context": context,
 	})
 }
 

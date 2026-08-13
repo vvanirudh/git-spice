@@ -89,11 +89,44 @@ func (cmd *claudeReviewCmd) Run(
 		}
 	}
 
+	repoRoot := wt.RootDir()
 	if cmd.PerBranch {
-		return cmd.runPerBranch(ctx, log, view, repo, svc, store, client, cfg, fromRef, toRef, title)
+		return cmd.runPerBranch(ctx, log, view, repo, svc, store, client, cfg, repoRoot, fromRef, toRef, title)
 	}
 
-	return cmd.runOverall(ctx, log, view, repo, client, cfg, fromRef, toRef, title)
+	return cmd.runOverall(ctx, log, view, repo, client, cfg, repoRoot, fromRef, toRef, title)
+}
+
+// graphContext returns call-graph impact context for base...working-tree,
+// or an empty string when the integration is disabled, the tool is
+// unavailable, or analysis fails. Enrichment is best-effort: it must
+// never block a review.
+func (cmd *claudeReviewCmd) graphContext(
+	ctx context.Context,
+	log *silog.Logger,
+	cfg *claude.Config,
+	repoRoot, base string,
+) string {
+	if !cfg.Graph.Enabled {
+		return ""
+	}
+
+	gc := claude.NewGraphClient(cfg.Graph.BinaryPath, log)
+	if !gc.IsAvailable() {
+		log.Warn("code-review-graph not found; skipping impact analysis " +
+			"(install it, or set graph.enabled=false to silence)")
+		return ""
+	}
+
+	impact, err := gc.RunImpact(ctx, repoRoot, base)
+	if err != nil {
+		log.Warn("Could not compute change impact; "+
+			"is the graph built? (run 'code-review-graph build')",
+			"error", err)
+		return ""
+	}
+
+	return impact.FormatContext(repoRoot)
 }
 
 func (cmd *claudeReviewCmd) runOverall(
@@ -103,6 +136,7 @@ func (cmd *claudeReviewCmd) runOverall(
 	repo *git.Repository,
 	client *claude.Client,
 	cfg *claude.Config,
+	repoRoot string,
 	fromRef, toRef, title string,
 ) error {
 	log.Infof("Reviewing changes: %s...%s", fromRef, toRef)
@@ -124,11 +158,20 @@ func (cmd *claudeReviewCmd) runOverall(
 		log.Info("No changes to review after filtering")
 		return nil
 	}
+	context := cmd.graphContext(ctx, log, cfg, repoRoot, fromRef)
+
 	if result.Budget.OverBudget {
-		return cmd.handleOverBudget(view, result.Budget)
+		// When the diff is too large, fall back to a graph-only review
+		// if impact context is available; otherwise report the overage.
+		if context == "" {
+			return cmd.handleOverBudget(view, result.Budget)
+		}
+		log.Warnf("Diff over budget (%d lines); "+
+			"reviewing with graph impact context only", result.Budget.TotalLines)
+		result.FilteredDiff = ""
 	}
 
-	prompt := claude.BuildReviewPrompt(cfg, title, result.FilteredDiff)
+	prompt := claude.BuildReviewPrompt(cfg, title, result.FilteredDiff, context)
 
 	fmt.Fprint(view, "Sending to Claude for review... ")
 	response, err := client.SendPromptWithModel(ctx, prompt, cfg.Models.Review)
@@ -158,6 +201,7 @@ func (cmd *claudeReviewCmd) runPerBranch(
 	store *state.Store,
 	client *claude.Client,
 	cfg *claude.Config,
+	repoRoot string,
 	fromRef, toRef, title string,
 ) error {
 	graph, err := svc.BranchGraph(ctx, nil)
@@ -168,7 +212,7 @@ func (cmd *claudeReviewCmd) runPerBranch(
 	pathResult := collectBranchPath(graph, store.Trunk(), toRef)
 	if len(pathResult.Branches) == 0 {
 		log.Info("No tracked branches found in range")
-		return cmd.runOverall(ctx, log, view, repo, client, cfg, fromRef, toRef, title)
+		return cmd.runOverall(ctx, log, view, repo, client, cfg, repoRoot, fromRef, toRef, title)
 	}
 	if pathResult.Incomplete {
 		log.Warn("Branch path incomplete; branch not found in graph",
@@ -181,7 +225,7 @@ func (cmd *claudeReviewCmd) runPerBranch(
 	var reviews []string
 	for _, branch := range pathResult.Branches {
 		result, err := cmd.reviewSingleBranch(
-			ctx, log, view, repo, graph, store, client, cfg, branch,
+			ctx, log, view, repo, graph, store, client, cfg, repoRoot, branch,
 		)
 		if err != nil {
 			return err
@@ -222,6 +266,7 @@ func (cmd *claudeReviewCmd) reviewSingleBranch(
 	store *state.Store,
 	client *claude.Client,
 	cfg *claude.Config,
+	repoRoot string,
 	branch string,
 ) (branchReviewResult, error) {
 	info, ok := graph.Lookup(branch)
@@ -260,7 +305,8 @@ func (cmd *claudeReviewCmd) reviewSingleBranch(
 		)
 	}
 
-	prompt := claude.BuildReviewPrompt(cfg, branch, result.FilteredDiff)
+	context := cmd.graphContext(ctx, log, cfg, repoRoot, base)
+	prompt := claude.BuildReviewPrompt(cfg, branch, result.FilteredDiff, context)
 
 	fmt.Fprint(view, "Reviewing... ")
 	response, err := client.SendPromptWithModel(ctx, prompt, cfg.Models.Review)

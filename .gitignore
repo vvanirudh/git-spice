@@ -5,3 +5,6 @@ cover.out
 cover.html
 /.idea
 .mise
+
+# code-review-graph local cache (optional review integration)
+.code-review-graph/

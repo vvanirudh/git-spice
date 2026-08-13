@@ -35,6 +35,22 @@ type Config struct {
 
 	// RefineOptions is a list of quick refinement options.
 	RefineOptions []RefineOption `yaml:"refineOptions"`
+
+	// Graph configures optional code-review-graph integration,
+	// which injects call-graph impact analysis into reviews.
+	Graph GraphConfig `yaml:"graph"`
+}
+
+// GraphConfig configures the optional code-review-graph integration.
+type GraphConfig struct {
+	// Enabled turns on call-graph impact context for reviews.
+	// Disabled by default; requires the code-review-graph CLI and a
+	// built graph (see 'code-review-graph build').
+	Enabled bool `yaml:"enabled"`
+
+	// BinaryPath overrides the code-review-graph executable path.
+	// If empty, it is resolved from PATH.
+	BinaryPath string `yaml:"binaryPath"`
 }
 
 // Models configures which Claude model to use for different operations.
@@ -201,6 +217,13 @@ func LoadConfig(path string) (*Config, error) {
 	if len(fileCfg.RefineOptions) > 0 {
 		cfg.RefineOptions = fileCfg.RefineOptions
 	}
+	// Graph defaults to disabled, so a file can only turn it on.
+	if fileCfg.Graph.Enabled {
+		cfg.Graph.Enabled = true
+	}
+	if fileCfg.Graph.BinaryPath != "" {
+		cfg.Graph.BinaryPath = fileCfg.Graph.BinaryPath
+	}
 
 	return cfg, nil
 }
@@ -265,6 +288,8 @@ Use suggestion blocks. Be succinct, direct, actionable.
 
 ### Changes Requested
 - [ ] ...
+
+{context}
 
 ## Diff:
 {diff}`

@@ -73,9 +73,17 @@ func TestBuildReviewPrompt(t *testing.T) {
 	cfg := DefaultConfig()
 
 	t.Run("Basic", func(t *testing.T) {
-		prompt := BuildReviewPrompt(cfg, "Fix login bug", "diff content")
+		prompt := BuildReviewPrompt(cfg, "Fix login bug", "diff content", "")
 		assert.Contains(t, prompt, "Fix login bug")
 		assert.Contains(t, prompt, "diff content")
+	})
+
+	t.Run("WithContext", func(t *testing.T) {
+		prompt := BuildReviewPrompt(
+			cfg, "Fix login bug", "diff content", "## Impact analysis\nrisk 0.9")
+		assert.Contains(t, prompt, "diff content")
+		assert.Contains(t, prompt, "## Impact analysis")
+		assert.Contains(t, prompt, "risk 0.9")
 	})
 }
 

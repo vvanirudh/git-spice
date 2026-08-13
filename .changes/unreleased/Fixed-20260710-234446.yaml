@@ -1,0 +1,4 @@
+kind: Fixed
+body: >-
+  submit: `--claude-summary` now warns and skips PR summary generation when the local base branch is behind its upstream, instead of filling the title and body from already-merged commits.
+time: 2026-07-10T16:44:46.000000-08:00

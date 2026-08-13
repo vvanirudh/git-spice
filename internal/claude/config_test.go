@@ -177,3 +177,20 @@ func TestConfigPath(t *testing.T) {
 		assert.Contains(t, path, "claude.yaml")
 	})
 }
+
+func TestConfig_graph(t *testing.T) {
+	t.Run("DefaultDisabled", func(t *testing.T) {
+		assert.False(t, DefaultConfig().Graph.Enabled)
+	})
+
+	t.Run("MergeFromFile", func(t *testing.T) {
+		configPath := filepath.Join(t.TempDir(), "claude.yaml")
+		require.NoError(t, os.WriteFile(configPath,
+			[]byte("graph:\n  enabled: true\n  binaryPath: /opt/crg\n"), 0o644))
+
+		cfg, err := LoadConfig(configPath)
+		require.NoError(t, err)
+		assert.True(t, cfg.Graph.Enabled)
+		assert.Equal(t, "/opt/crg", cfg.Graph.BinaryPath)
+	})
+}
